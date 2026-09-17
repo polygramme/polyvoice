@@ -27,12 +27,14 @@ Model choice:
 | model | why / why not |
 |---|---|
 | Qwen3.5-4B / 9B | already runs in our stack (SkyRL Megatron LoRA); good enough for the demo; not what the voice market uses |
-| Nemotron 3 Nano 30B-A3B | what PhoneLLM is built on; NVIDIA Open Model License; vLLM LoRA support for NemotronH; hybrid Mamba-2 MoE, so SkyRL's Megatron LoRA path for it is UNVERIFIED (must smoke-test before committing) |
+| Nemotron 3 Nano 30B-A3B | what PhoneLLM is built on; NVIDIA Open Model License; vLLM LoRA support for NemotronH; Megatron-Bridge ships a `nemotronh` bridge, so the SkyRL Megatron path is plausible but UNVERIFIED for LoRA on the Mamba mixer and MoE layers (boot test on 2×H100 before committing) |
+| pipecat-ai/phonellm-alpha-1 | Daily's full-parameter SFT of Nemotron 3 Nano (BSD-2 + Nemotron licence); same architecture (`NemotronHForCausalLM`, 52 layers, 128+1 experts, 6 active, `trust_remote_code`); the natural incumbent for a voice loop: start from their weights and let the loop add a LoRA per deployment. Served with `enable_thinking: false`; the cookbook's `nemotron3_disable_thinking` renderer matches. bf16 weights ≈ 60 GB → trainer and sampler each need an 80 GB GPU |
 | Nemotron-Flash 1B/3B | exists (arXiv 2511.18890, Nov 2025) but CC-BY-NC-4.0, no tool-calling docs, no voice use anywhere; not usable |
 | Qwen 3.8 27B | top of Pipecat's open voice-readiness benchmark (98.2% at 649 ms); a later step, not the demo |
 
-Recommendation: demo on Qwen3.5-9B, then port the recipe to Nemotron 3 Nano once the Megatron
-smoke test passes. "PhoneLLM-class" is the pitch, and PhoneLLM's own base scored 28.6 on
+Recommendation: smoke the loop on Qwen3.5-4B, then boot-test `pipecat-ai/phonellm-alpha-1` on 2×H100 (Megatron
+LoRA on NemotronH, sampler fit, step time) and make it the recipe's incumbent if it boots; Nemotron 3 Nano base
+is the same test with a weaker starting point. "PhoneLLM-class" is the pitch, and PhoneLLM's own base scored 28.6 on
 PhoneBench before SFT, so the headroom on Nano is real.
 
 ## Where Coval fits (and where it must not)
