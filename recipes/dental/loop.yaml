@@ -1,0 +1,79 @@
+# polyvoice dental: the LLM behind a phone receptionist improves nightly, scored by Coval.
+#
+#   environment  Coval's simulated caller (a persona) plays the scenarios of a test set against
+#                the polyloop proxy over a public https tunnel; every conversation is a proxy session.
+#   verifier     Coval metrics (LLM judges + deterministic checks) score each conversation; the mean
+#                of `metric_ids` is the reward; the judges' explanations are the hindsight hint.
+#   train        hinted on-policy self-distillation on the captured sessions (opsd). RL rollouts
+#                belong in the text sandbox (docs/PLAN.md), not on Coval.
+#   gate         candidate vs incumbent on a held-out Coval test set, K repeats, paired per scenario.
+#
+# Per cycle, as configured here: filter 8 scenarios x 2 = 16 conversations (round 1), gate 8 x 4 x 2
+# policies = 64. Coval bills simulation minutes; see README.md before raising these.
+name: dental
+model: Qwen/Qwen3.5-4B
+renderer: qwen3_5_disable_thinking
+base_url: http://127.0.0.1:8000
+proxy_url: http://127.0.0.1:8787
+runs_dir: ~/polyloop-runs
+tasks: coval://REPLACE_POOL            # polyvoice seed --test-set NEW:dental-pool --file recipes/dental/scenarios-pool.json
+
+environment:
+  kind: coval
+  options:
+    agent_id: REPLACE_AGENT_ID         # a MODEL_TYPE_CHAT agent (its metadata is copied per endpoint)
+    persona_id: REPLACE_PERSONA_ID     # e.g. "Standard Customer" from the account's default personas
+    metric_ids: [REPLACE_METRIC_COMPOSITE, REPLACE_METRIC_NO_PRICE]
+    public_url: https://REPLACE.trycloudflare.com   # tunnel to proxy_url; Coval refuses http and private IPs
+    # candidate:                       # optional second proxy (polyloop proxy --slot candidate --port 8788)
+    #   public_url: https://REPLACE-2.trycloudflare.com
+    #   proxy_url: http://127.0.0.1:8788
+    concurrency: 5                     # Starter plan allows 5, Growth 25
+    max_tokens: 256                    # one spoken turn
+    pass_value: 1.0
+    hint_failures_only: true
+
+stages:
+  - kind: opsd
+    group_size: 2
+    groups_per_batch: 16
+    steps: 4
+    learning_rate: 1.0e-5
+    max_tokens: 256
+    max_trajectory_tokens: 4096
+    lora_rank: 32
+    kl_penalty_coef: 1.0
+    max_hint_chars: 1500
+    min_rows: 16
+    save_every: 2
+
+sandbox:
+  max_parallel: 8
+
+filter:
+  pool_sample: 8
+  rollouts_per_task: 2
+  keep_min: 0.0
+  keep_max: 1.0
+  min_tasks: 1                          # an opsd-only loop trains on sessions, not on the contested set
+  target_tasks: 4
+  max_rounds: 1
+
+budget:
+  gpus: 2
+  max_cycle_gpu_seconds: 10800
+
+gate:
+  holdout: coval://REPLACE_HOLDOUT     # polyvoice seed --test-set NEW:dental-holdout --file recipes/dental/scenarios-holdout.json
+  holdout_limit: 8                     # 8 scenarios shipped; the gate needs >= max(4, limit/2) tasks
+  holdout_seed: 0
+  repeats: 4
+  temperature: 1.0
+  min_delta: 0.05
+  tie_band: 0.05
+  max_regressions: 2
+  logprob_abs_diff_max: 0.05
+  max_error_rate: 0.2
+
+promote:
+  mode: approve

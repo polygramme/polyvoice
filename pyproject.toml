@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polyvoice"
+version = "0.0.1"
+description = "A voice agent's LLM that improves from its own calls: polyloop-rl cycles with Coval as the production scorer and the held-out gate."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+dependencies = [
+  "polyloop-rl @ git+https://github.com/runnerelectrode/polyloop-rl@5d79c689529d372347051de4bf0ae81722e15437",
+  "click>=8.1", "pyyaml>=6", "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+polyvoice = "polyvoice.cli:main"
+
+[project.entry-points."polyloop.environments"]
+coval = "polyvoice.envs.coval:CovalEnvironment"
+
+[tool.setuptools.packages.find]
+include = ["polyvoice*"]
