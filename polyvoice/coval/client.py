@@ -3,7 +3,8 @@
 Only what the loop needs: test cases of a test set, agents (duplicate + point at an endpoint),
 runs (launch, poll), simulated conversations of a run and their metric outputs. httpx only,
 X-API-Key auth. Response envelopes verified against the live API on 2026-09-17:
-lists return {"<resource>": [...], "next_page_token": ""}; `/conversations/simulated` lists
+lists return {"<resource>": [...], "next_page_token": ""}; filter values must be double-quoted
+(`test_set_id="abc12345"`; the unquoted form in the SDK docs is rejected); `/conversations/simulated` lists
 simulations with `test_case_id`; `/conversations/simulated/{id}/metrics` returns the per-metric
 outputs with `value` and `explanation`.
 """
@@ -55,6 +56,10 @@ class CovalError(RuntimeError):
     pass
 
 
+def _filter(field: str, value: str) -> str:
+    return f'{field}="{value}"'
+
+
 def _id(rec: dict, *names: str) -> str:
     for n in names:
         if rec.get(n):
@@ -99,7 +104,7 @@ class CovalClient:
         return self._paged(f"/{resource}", key or resource.replace("-", "_"))
 
     def test_cases(self, ts_id: str) -> list[CovalTask]:
-        recs = self._paged("/test-cases", "test_cases", {"filter": f"test_set_id={ts_id}", "order_by": "create_time"})
+        recs = self._paged("/test-cases", "test_cases", {"filter": _filter("test_set_id", ts_id), "order_by": "create_time"})
         return [CovalTask.from_api(r) for r in recs]
 
     def test_set(self, ts_id: str) -> dict:
@@ -107,6 +112,10 @@ class CovalClient:
         return d.get("test_set") or d
 
     def create_test_set(self, display_name: str, description: str = "", test_set_type: str = "SCENARIO") -> dict:
+        """Create a test set, or return the existing one with this display name."""
+        for ts in self.list("test-sets", "test_sets"):
+            if ts.get("display_name") == display_name:
+                return ts
         d = self._req("POST", "/test-sets", json={"display_name": display_name, "description": description,
                                                   "test_set_type": test_set_type})
         return d.get("test_set") or d
@@ -173,7 +182,7 @@ class CovalClient:
     def simulations(self, run_id: str) -> list[dict]:
         """Simulations of a run with their test_case_id (no `include=metric_values`: on that
         path the API nulls test_case_id). Metric values come from simulation_metrics()."""
-        return self._paged("/conversations/simulated", "simulated_conversations", {"filter": f"run_id={run_id}"})
+        return self._paged("/conversations/simulated", "simulated_conversations", {"filter": _filter("run_id", run_id)})
 
     def simulation_metrics(self, simulation_id: str) -> list[dict]:
         return self._paged(f"/conversations/simulated/{simulation_id}/metrics", "metrics", {"view": "BASIC"})

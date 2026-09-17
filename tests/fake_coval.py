@@ -26,7 +26,8 @@ class FakeCoval:
         assert request.headers["X-API-Key"] == "k"
         path, q, m = request.url.path.replace("/v1", "", 1), dict(request.url.params), request.method
         if m == "GET" and path == "/test-cases":
-            ts = q["filter"].split("=", 1)[1]
+            assert q["filter"].startswith('test_set_id="') and q["filter"].endswith('"'), q["filter"]
+            ts = q["filter"].split("=", 1)[1].strip('"')
             page = int(q.get("page_token") or 0)
             items = self.cases[ts][page * 2:(page + 1) * 2]
             nxt = str(page + 1) if (page + 1) * 2 < len(self.cases[ts]) else ""
@@ -36,6 +37,8 @@ class FakeCoval:
             rec = {"id": f"new{len(self.cases[body['test_set_id']])}", **body}
             self.cases[body["test_set_id"]].append(rec)
             return httpx.Response(201, json={"test_case": rec})
+        if m == "GET" and path == "/test-sets":
+            return httpx.Response(200, json={"test_sets": [], "next_page_token": ""})
         if m == "GET" and path.startswith("/test-sets/"):
             return httpx.Response(200, json={"test_set": {"id": path.split("/")[2], "display_name": "x"}})
         if m == "GET" and path.startswith("/agents/"):
@@ -74,7 +77,8 @@ class FakeCoval:
             run["status"] = "COMPLETED" if self.polls >= 2 else "IN PROGRESS"
             return httpx.Response(200, json={"run": run})
         if m == "GET" and path == "/conversations/simulated":
-            rid = q["filter"].split("=", 1)[1]
+            assert q["filter"].startswith('run_id="'), q["filter"]
+            rid = q["filter"].split("=", 1)[1].strip('"')
             assert "include" not in q
             return httpx.Response(200, json={"simulated_conversations": self.sims[rid], "next_page_token": ""})
         if m == "GET" and path.endswith("/metrics") and path.startswith("/conversations/simulated/"):
