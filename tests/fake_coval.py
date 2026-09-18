@@ -41,6 +41,8 @@ class FakeCoval:
             return httpx.Response(200, json={"test_sets": [], "next_page_token": ""})
         if m == "GET" and path.startswith("/test-sets/"):
             return httpx.Response(200, json={"test_set": {"id": path.split("/")[2], "display_name": "x"}})
+        if m == "GET" and path == "/agents":
+            return httpx.Response(200, json={"agents": list(self.agents.values()), "next_page_token": ""})
         if m == "GET" and path.startswith("/agents/"):
             return httpx.Response(200, json={"agent": self.agents[path.split("/")[2]]})
         if m == "GET" and path.startswith("/personas/"):

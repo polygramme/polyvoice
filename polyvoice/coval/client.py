@@ -129,13 +129,24 @@ class CovalClient:
     def metric(self, metric_id: str) -> dict:
         return self._req("GET", f"/metrics/{metric_id}").get("metric", {})
 
+    def find_agent(self, customer_agent_id: str) -> dict | None:
+        for a in self.list("agents", "agents"):
+            if a.get("customer_agent_id") == customer_agent_id:
+                return a
+        return None
+
     def agent_for_endpoint(self, base_agent_id: str, *, display_name: str, chat_endpoint: str, auth_header: str | None,
                            temperature: float, max_tokens: int, customer_agent_id: str) -> str:
-        """Duplicate the base agent and point the copy at `chat_endpoint` (an OpenAI-compatible
-        chat completions URL). PATCH replaces `metadata` wholesale, so the base's is read first."""
-        dup = self._req("POST", f"/agents/{base_agent_id}/duplicate", json={})
-        agent = dup.get("agent") or dup
-        agent_id = _id(agent, "id", "agent_id")
+        """Point an agent with `customer_agent_id` at `chat_endpoint` (an OpenAI-compatible chat
+        completions URL): re-use the existing one if present (customer_agent_id is unique per org),
+        else duplicate the base agent. PATCH replaces `metadata` wholesale, so the base's is read first."""
+        existing = self.find_agent(customer_agent_id)
+        if existing:
+            agent_id = _id(existing, "id", "agent_id")
+        else:
+            dup = self._req("POST", f"/agents/{base_agent_id}/duplicate", json={})
+            agent = dup.get("agent") or dup
+            agent_id = _id(agent, "id", "agent_id")
         meta = dict(self.agent(base_agent_id).get("metadata") or {})
         meta.update(agent_metadata(chat_endpoint, auth_header=auth_header, temperature=temperature, max_tokens=max_tokens))
         self._req("PATCH", f"/agents/{agent_id}", json={"display_name": display_name[:200], "metadata": meta,
