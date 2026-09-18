@@ -20,12 +20,15 @@ conversation to its score and the judge's explanation, the environment that maps
 onto polyloop's rollout contract, a CLI to check the account and seed test sets, and the
 `dental` recipe (a receptionist system prompt, 16 pool scenarios, 8 held-out scenarios).
 
-Status: **v0, not yet run against Coval end to end.** The client's paths and envelopes were
-verified against the live API on 2026-09-17 with read-only calls; the fake in `tests/` follows
-those shapes. Two shapes are still unconfirmed until the first run: that a simulation's
-`simulation_id` equals the `{{simulation_output_id}}` Coval sends in the header (the ledger
-records both), and that binary judge values arrive as numbers or booleans (`rewards._num` also
-accepts "true"/"false"/"pass"/"fail").
+Status: **v0; the first full cycle ran on 2026-09-18.** Qwen3.5-4B on the `dental` recipe, Coval
+simulating the caller, 82 simulated conversations: base 0.888 vs candidate 0.938 on the 8 held-out
+scenarios × 4 repeats, paired delta +0.049 with a 95% CI of [−0.021, +0.117], 4 wins / 1 loss / 3 ties.
+The gate rejected it (a hair under the 0.05 minimum), which is the right call on 8 scenarios. Receipt
+and per-step metrics in [`docs/RESULTS.md`](docs/RESULTS.md). What the run confirmed: Coval's
+judge values parse (the binary judge returns "YES"/"NO"), the proxy's session id equals the id Coval
+reports scores under, so judge explanations join the right training rows, and held-out sessions never
+reach training. Run on a Modal H100:2 container with the proxy published through Modal's port forward;
+the same recipe runs on any GPU box with a public https URL for the proxy.
 
 ## What Coval does in this loop, and what it must not
 
@@ -49,8 +52,9 @@ uv pip install -e .                         # pulls polyloop-rl at the pinned re
 export COVAL_API_KEY=...                    # never in the recipe
 
 # 1. the proxy Coval will call, with the receptionist prompt prepended to every conversation
-polyloop proxy --loop recipes/dental/loop.yaml --port 8787 --system-prompt recipes/dental/system.md
-cloudflared tunnel --url http://127.0.0.1:8787      # note the https URL -> environment.options.public_url
+polyloop proxy --loop recipes/dental/loop.yaml --host 0.0.0.0 --port 8787 --system-prompt recipes/dental/system.md
+cloudflared tunnel --config /dev/null --protocol http2 --url http://127.0.0.1:8787   # https URL -> environment.options.public_url
+# (on Lambda nodes the default config file belongs to their JupyterLab tunnel; on Modal use modal.forward and bind the proxy to 0.0.0.0)
 # optional second instance so production traffic stays on the live adapter while a candidate is scored:
 polyloop proxy --loop recipes/dental/loop.yaml --port 8788 --slot candidate --system-prompt recipes/dental/system.md
 
