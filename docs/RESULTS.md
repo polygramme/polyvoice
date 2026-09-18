@@ -44,3 +44,16 @@ Per scenario, incumbent → candidate: 1.00→0.88, 0.81→0.81, 0.88→0.94, 1.
   curve; the pool is also easy for the base model (0.89 to 0.94), so harder scenarios are the next lever.
 - Cost: about $8 of Modal H100:2 for the run itself; the night's ten launches (tunnel, agent-id and import
   bugs) roughly doubled that. Coval: about 80 simulation minutes.
+
+## PhoneLLM Alpha 1 boot test (2026-09-18, Modal H100:2)
+
+Two attempts, same recipe with `model: pipecat-ai/phonellm-alpha-1` and `renderer: nemotron3_disable_thinking`.
+
+- **Trainer: works.** SkyRL's Megatron backend loaded the 30B hybrid Mamba-MoE (`NemotronHForCausalLM`) and
+  created a LoRA model in ~2.5 min ("Created LoRA model" in the server log).
+- **Sampler: fails.** vLLM's engine core died during initialization (`Failed core proc(s): {'EngineCore': -11}`,
+  a segmentation fault) with CUDA graphs on and again with `enforce_eager`. The root-cause line is in Ray's
+  engine-core log, not captured. Next step is a sampler-only boot of vLLM on the model with the engine log
+  visible, without LoRA first, then with; the likely fixes are a newer vLLM in the SkyRL environment (LoRA on the
+  hybrid architecture) or a kernel build change.
+- Cost: ~$6 of Modal H100:2 for the two attempts.
