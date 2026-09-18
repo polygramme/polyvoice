@@ -129,18 +129,19 @@ class CovalClient:
     def metric(self, metric_id: str) -> dict:
         return self._req("GET", f"/metrics/{metric_id}").get("metric", {})
 
-    def find_agent(self, customer_agent_id: str) -> dict | None:
+    def find_agent(self, display_name: str) -> dict | None:
         for a in self.list("agents", "agents"):
-            if a.get("customer_agent_id") == customer_agent_id:
+            if a.get("display_name") == display_name:
                 return a
         return None
 
     def agent_for_endpoint(self, base_agent_id: str, *, display_name: str, chat_endpoint: str, auth_header: str | None,
                            temperature: float, max_tokens: int, customer_agent_id: str) -> str:
-        """Point an agent with `customer_agent_id` at `chat_endpoint` (an OpenAI-compatible chat
-        completions URL): re-use the existing one if present (customer_agent_id is unique per org),
-        else duplicate the base agent. PATCH replaces `metadata` wholesale, so the base's is read first."""
-        existing = self.find_agent(customer_agent_id)
+        """Point the agent named `display_name` at `chat_endpoint` (an OpenAI-compatible chat
+        completions URL): re-use it if present, else duplicate the base agent. customer_agent_id is
+        NOT set: Coval keeps it unique per org even across deleted agents, so a re-created agent 409s.
+        PATCH replaces `metadata` wholesale, so the base's is read first."""
+        existing = self.find_agent(display_name)
         if existing:
             agent_id = _id(existing, "id", "agent_id")
         else:
@@ -149,8 +150,7 @@ class CovalClient:
             agent_id = _id(agent, "id", "agent_id")
         meta = dict(self.agent(base_agent_id).get("metadata") or {})
         meta.update(agent_metadata(chat_endpoint, auth_header=auth_header, temperature=temperature, max_tokens=max_tokens))
-        self._req("PATCH", f"/agents/{agent_id}", json={"display_name": display_name[:200], "metadata": meta,
-                                                       "customer_agent_id": customer_agent_id[:100]})
+        self._req("PATCH", f"/agents/{agent_id}", json={"display_name": display_name[:200], "metadata": meta})
         return agent_id
 
     def launch_run(self, *, agent_id: str, persona_id: str, ts_id: str, metric_ids: list[str], test_case_ids: list[str],
