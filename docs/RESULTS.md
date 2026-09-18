@@ -51,9 +51,11 @@ Two attempts, same recipe with `model: pipecat-ai/phonellm-alpha-1` and `rendere
 
 - **Trainer: works.** SkyRL's Megatron backend loaded the 30B hybrid Mamba-MoE (`NemotronHForCausalLM`) and
   created a LoRA model in ~2.5 min ("Created LoRA model" in the server log).
-- **Sampler: fails.** vLLM's engine core died during initialization (`Failed core proc(s): {'EngineCore': -11}`,
-  a segmentation fault) with CUDA graphs on and again with `enforce_eager`. The root-cause line is in Ray's
-  engine-core log, not captured. Next step is a sampler-only boot of vLLM on the model with the engine log
-  visible, without LoRA first, then with; the likely fixes are a newer vLLM in the SkyRL environment (LoRA on the
-  hybrid architecture) or a kernel build change.
-- Cost: ~$6 of Modal H100:2 for the two attempts.
+- **Sampler: fixed (2026-09-18 evening).** vLLM's engine core had died at init (`EngineCore: -11`). A sampler-only
+  boot on one H100 (vLLM 0.26.0, transformers 5.8, torch 2.11+cu128, mamba_ssm + causal_conv1d present) served
+  the model both without and with LoRA at 8k context / 16 sequences / eager. With LoRA the model takes 65.7 GiB,
+  so the 4B settings (32k context, 64 sequences, prefix caching, 4 LoRA slots) left no room and the engine crashed.
+  Fix: `max_model_len 8192`, `max_num_seqs 16`, `enable_prefix_caching false`, `max_loras 2`, eager, memory
+  fraction 0.93. With those the loop's proxy came up on PhoneLLM in 13.7 min and the smoke scored 2/2 held-out
+  conversations (mean reward 0.625; the 4B scored 0.875 on the same two).
+- Cost: ~$6 for the two failed attempts, ~$1 for the debug, ~$3 for the smoke.
