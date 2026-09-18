@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 dependencies = [
-  "polyloop-rl @ git+https://github.com/runnerelectrode/polyloop-rl@5d79c689529d372347051de4bf0ae81722e15437",
+  "polyloop-rl @ git+https://github.com/runnerelectrode/polyloop-rl@ab4eef0bc1a241e26a6c66b1cdf2546b23de7962",
   "click>=8.1", "pyyaml>=6", "httpx>=0.27",
 ]
 
