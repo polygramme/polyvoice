@@ -6,14 +6,7 @@ into the loop as the environment and the verifier, so the cycle polyloop already
 agents (snapshot, preflight, filter, train, evaluate, gate, promote) runs for the LLM inside a
 phone receptionist.
 
-```
-Coval persona ──calls──▶ polyloop proxy (public https) ──▶ your Tinker server (LoRA adapter)
-      │                        │ traces/<date>.jsonl (token-exact, session = simulation id)
-      ▼                        ▼
-Coval metrics: reward + judge explanation ──ledger──▶ hinted OPSD rows ──▶ candidate adapter
-      ▼
-held-out Coval test set, base vs candidate, K repeats ──▶ paired receipt ──▶ promote (proxy serves it)
-```
+![architecture](docs/architecture.svg)
 
 What lives here and not in polyloop: the Coval client, the ledger that joins every simulated
 conversation to its score and the judge's explanation, the environment that maps a Coval run
@@ -88,6 +81,7 @@ polyvoice/
 recipes/dental/      loop.yaml, system.md, scenarios-pool.json, scenarios-holdout.json, program.md
 tests/               fake Coval in the live API's shapes; the polyloop runner driven end to end
 docs/PLAN.md         the full voice loop plan (sandbox rollouts, production scoring, model choice)
+docs/RESULTS.md      cycle receipts; scripts/arch_diagram.py renders docs/architecture.svg
 ```
 
 ## License
