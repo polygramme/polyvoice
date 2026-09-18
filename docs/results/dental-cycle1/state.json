@@ -1,0 +1,148 @@
+{
+  "candidate": {
+    "cycle": "20260918T041545Z",
+    "id": "dental-20260918T041545Z",
+    "parent": "base",
+    "sampler_path": "tinker://model_21f78303/final",
+    "stages": [
+      {
+        "sampler_path": "tinker://model_21f78303/final",
+        "stage": "opsd",
+        "steps": 4
+      }
+    ],
+    "state_path": "tinker://model_21f78303/weights/final",
+    "step": 4
+  },
+  "decision": "reject",
+  "eval_candidate": {
+    "5gqzF9uzRXA83RJPvyUbDT": 0.875,
+    "74xRNCoyAkv3mWxdMJ6bxG": 0.8125,
+    "EM9jX8MJmsu74PgJKLs2Zk": 0.9375,
+    "JN4LHmWWTCyAys6FHBkkKH": 1.0,
+    "cJmPpDLq6oYDdecuo9gyP4": 1.0,
+    "iEVKWfPwspyuP9C4QeiVvK": 1.0,
+    "k2YqeQinbUANkxeyGGxVWe": 0.9375,
+    "oX4ocyEw3KiAyTNNwiQN8x": 0.9375
+  },
+  "eval_incumbent": {
+    "5gqzF9uzRXA83RJPvyUbDT": 1.0,
+    "74xRNCoyAkv3mWxdMJ6bxG": 0.8125,
+    "EM9jX8MJmsu74PgJKLs2Zk": 0.875,
+    "JN4LHmWWTCyAys6FHBkkKH": 1.0,
+    "cJmPpDLq6oYDdecuo9gyP4": 0.875,
+    "iEVKWfPwspyuP9C4QeiVvK": 0.7916666666666666,
+    "k2YqeQinbUANkxeyGGxVWe": 0.8125,
+    "oX4ocyEw3KiAyTNNwiQN8x": 0.9375
+  },
+  "failed_stage": null,
+  "gpu_seconds": {
+    "evaluate.candidate": 567.9384228880003,
+    "evaluate.incumbent": 662.7485715059997,
+    "filter": 351.61658227,
+    "preflight": 57.27096916000005,
+    "train": 705.0464656600001
+  },
+  "holdout_id": "holdout-8-743d1f21500f598b",
+  "holdout_names": [
+    "iEVKWfPwspyuP9C4QeiVvK",
+    "oX4ocyEw3KiAyTNNwiQN8x",
+    "JN4LHmWWTCyAys6FHBkkKH",
+    "cJmPpDLq6oYDdecuo9gyP4",
+    "EM9jX8MJmsu74PgJKLs2Zk",
+    "k2YqeQinbUANkxeyGGxVWe",
+    "74xRNCoyAkv3mWxdMJ6bxG",
+    "5gqzF9uzRXA83RJPvyUbDT"
+  ],
+  "incumbent": null,
+  "logprob_abs_diff_max": null,
+  "loop": "dental",
+  "measured": 8,
+  "model": "Qwen/Qwen3.5-4B",
+  "paired": {
+    "candidate_mean": 0.9375,
+    "delta_ci95": [
+      -0.02083333333333333,
+      0.11718750000000001
+    ],
+    "incumbent_mean": 0.8880208333333334,
+    "losses": 1,
+    "mean_delta": 0.04947916666666667,
+    "n_tasks": 8,
+    "ties": 3,
+    "wins": 4
+  },
+  "pool_dataset": "coval://9vM3uNqc",
+  "pool_size": 16,
+  "reason": null,
+  "receipt": "/root/polyloop-runs/dental/cycles/20260918T041545Z/receipt.json",
+  "stage_summary": {
+    "evaluate": {
+      "tasks": 8
+    },
+    "filter": {
+      "contested": 2,
+      "measured": 8,
+      "newly_measured": 8,
+      "rounds": 1
+    },
+    "gate": {
+      "ci": [
+        -0.02083333333333333,
+        0.11718750000000001
+      ],
+      "decision": "reject",
+      "losses": 1,
+      "mean_delta": 0.04947916666666667,
+      "wins": 4
+    },
+    "preflight": {
+      "checks": [
+        "pool",
+        "holdout",
+        "coval",
+        "trainer",
+        "disk",
+        "staleness",
+        "engine-warm"
+      ]
+    },
+    "snapshot": {
+      "holdout": 8,
+      "holdout_id": "holdout-8-743d1f21500f598b",
+      "incumbent": "base",
+      "pool": 16,
+      "trace_files": 1
+    },
+    "train": {
+      "candidate": "dental-20260918T041545Z",
+      "logprob_abs_diff_max": null,
+      "stages": [
+        {
+          "sampler_path": "tinker://model_21f78303/final",
+          "stage": "opsd",
+          "steps": 4
+        }
+      ],
+      "steps": 4
+    }
+  },
+  "stages_done": [
+    "snapshot",
+    "preflight",
+    "filter",
+    "train",
+    "evaluate",
+    "gate"
+  ],
+  "started": "2026-09-18T04:15:46+00:00",
+  "status": "rejected",
+  "trace_files": [
+    "/root/polyloop-runs/dental/traces/2026-09-18.jsonl"
+  ],
+  "train_steps": 4,
+  "train_task_names": [
+    "2VmzY5Drgaiu49dbSmCcKV",
+    "axR8tyDFm53ZQk4pLPCnVT"
+  ]
+}
