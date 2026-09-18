@@ -54,7 +54,8 @@ class CovalEnvironment(BaseEnvironment):
                  proxy_url: str | None = None, candidate: dict | None = None, concurrency: int = 5, poll_seconds: int = 15,
                  run_timeout: int = 3600, temperature: float | None = None, max_tokens: int = 256, pass_value: float = 1.0,
                  hint_failures_only: bool = True, max_judge_chars: int = 1200, api_base: str = "https://api.coval.dev/v1",
-                 api_key_env: str = "COVAL_API_KEY", ledger: str = "coval_ledger.jsonl", client: Any = None):
+                 api_key_env: str = "COVAL_API_KEY", ledger: str = "coval_ledger.jsonl", check_public: bool = True,
+                 client: Any = None):
         super().__init__(cfg, store, log=log)
         self.agent_id, self.persona_id, self.metric_ids = agent_id, persona_id, list(metric_ids)
         self.proxies = {"default": {"public_url": public_url, "proxy_url": proxy_url or cfg.proxy_url}}
@@ -67,6 +68,7 @@ class CovalEnvironment(BaseEnvironment):
         self.hint_failures_only, self.max_judge_chars = hint_failures_only, max_judge_chars
         self.api_base, self.api_key_env = api_base, api_key_env
         self.ledger_path = store.root / ledger
+        self.check_public = check_public  # False where the host cannot reach its own public URL (e.g. inside a Modal container)
         self._client = client
 
     # ---- pieces ---------------------------------------------------------
@@ -133,7 +135,7 @@ class CovalEnvironment(BaseEnvironment):
                     problems.append(f"{role} proxy unreachable at {p['proxy_url']}: {exc}")
             if not str(p["public_url"]).startswith("https://"):
                 problems.append(f"{role} public_url must be https (Coval refuses http and private IPs): {p['public_url']}")
-            else:
+            elif self.check_public:
                 try:
                     r = httpx.get(p["public_url"].rstrip("/") + "/healthz", timeout=15)
                     if r.status_code >= 400:
