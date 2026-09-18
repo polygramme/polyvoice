@@ -51,7 +51,8 @@ route([(760, 170), (830, 170)], "sample", lx=795, ly=164)
 
 # lane 2: loop stages
 y = 330
-text(24, y - 14, "one cycle  (polyloop run --loop recipes/dental/loop.yaml)", 13, "700", INK)
+text(24, y - 14, "one cycle", 13, "700", INK)
+text(1156, y - 14, "polyloop run --loop recipes/dental/loop.yaml", 11, anchor="end")
 stages = [("filter", ["8 scenarios × 2 calls", "under the incumbent"]), ("train (opsd)", ["rows from the captured", "turns + judge hints"]),
           ("evaluate", ["8 held-out × 4, base", "then candidate, paired"]), ("gate", ["bootstrap CI, regressions;", "receipt.json"]), ("promote", ["approve → live.json →", "proxy serves it"])]
 xs = [24 + 232 * i for i in range(len(stages))]
@@ -61,19 +62,18 @@ for i in range(len(xs) - 1):
     route([(xs[i] + 210, y + 37), (xs[i + 1], y + 37)])
 
 # flows
-route([(129, 230), (129, y)], "runs: launch, poll, rewards by simulation id", lx=140, ly=290, anchor="start")
-route([(361, 230), (361, y)], "held-out runs", lx=372, ly=290, anchor="start")
-route([(600, 230), (600, y)], "traces + ledger → rows", lx=612, ly=290, anchor="start")
-route([(1060, y), (1060, 250), (985, 250), (985, 230)], "candidate adapter", lx=1070, ly=290, anchor="start")
+route([(200, 230), (200, y)], "filter + evaluate runs: launch, poll,", lx=212, ly=280, anchor="start")
+text(212, 294, "rewards + explanations by simulation id", 11)
+route([(520, 230), (520, 300), (361, 300), (361, y)], "captured turns + ledger → opsd rows", lx=532, ly=280, anchor="start")
+route([(1057, y), (1057, 250), (985, 250), (985, 230)], "candidate adapter", lx=1067, ly=290, anchor="start")
 
 # lane 3: artifacts
 ay = 450
 box(24, ay, 440, 84, "coval_ledger.jsonl", ["every simulated call: session, scenario, policy, label,", "reward, judge explanation; held-out sessions", "excluded from training"], "store")
 box(490, ay, 320, 84, "cycles/<id>/receipt.json", ["cycle 1: base 0.888 → candidate 0.938,", "delta +0.049, CI [−0.021, 0.117], 4/1/3", "→ rejected"], "store")
-box(836, ay, 320, 84, "Coval dashboard", ["the same runs, transcripts and", "metric verdicts, per simulation"], "coval")
-route([(129, y + 74), (129, ay)])
-route([(750, y + 74), (750, ay)], "receipt", lx=762, ly=420, anchor="start")
-route([(361, y + 74), (361, 430), (996, 430), (996, ay)], dash=True)
+box(836, ay, 320, 84, "Coval dashboard", ["the same runs the loop launched:", "transcripts and metric verdicts", "per simulated call"], "coval")
+route([(200, y + 74), (200, ay)])
+route([(825, y + 74), (825, 430), (650, 430), (650, ay)], "receipt", lx=837, ly=424, anchor="start")
 out.append("</svg>")
 Path(__file__).resolve().parents[1].joinpath("docs", "architecture.svg").write_text("\n".join(out))
 print("wrote docs/architecture.svg")

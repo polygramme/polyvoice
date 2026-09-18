@@ -29,7 +29,8 @@
 <text x='397' y='206' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='middle'>replies</text>
 <polyline points='760,170 830,170' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
 <text x='795' y='164' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='middle'>sample</text>
-<text x='24' y='316' font-family='Helvetica, Arial, sans-serif' font-size='13' font-weight='700' fill='#1f2933' text-anchor='start'>one cycle  (polyloop run --loop recipes/dental/loop.yaml)</text>
+<text x='24' y='316' font-family='Helvetica, Arial, sans-serif' font-size='13' font-weight='700' fill='#1f2933' text-anchor='start'>one cycle</text>
+<text x='1156' y='316' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='end'>polyloop run --loop recipes/dental/loop.yaml</text>
 <rect x='24' y='330' width='210' height='74' rx='10' fill='#f3eefc' stroke='#9aa5b1' stroke-width='1.2'/>
 <text x='36' y='352' font-family='Helvetica, Arial, sans-serif' font-size='14' font-weight='700' fill='#1f2933' text-anchor='start'>filter</text>
 <text x='36' y='372' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>8 scenarios × 2 calls</text>
@@ -54,14 +55,13 @@
 <polyline points='466,367 488,367' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
 <polyline points='698,367 720,367' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
 <polyline points='930,367 952,367' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<polyline points='129,230 129,330' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<text x='140' y='290' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>runs: launch, poll, rewards by simulation id</text>
-<polyline points='361,230 361,330' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<text x='372' y='290' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>held-out runs</text>
-<polyline points='600,230 600,330' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<text x='612' y='290' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>traces + ledger → rows</text>
-<polyline points='1060,330 1060,250 985,250 985,230' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<text x='1070' y='290' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>candidate adapter</text>
+<polyline points='200,230 200,330' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
+<text x='212' y='280' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>filter + evaluate runs: launch, poll,</text>
+<text x='212' y='294' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>rewards + explanations by simulation id</text>
+<polyline points='520,230 520,300 361,300 361,330' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
+<text x='532' y='280' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>captured turns + ledger → opsd rows</text>
+<polyline points='1057,330 1057,250 985,250 985,230' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
+<text x='1067' y='290' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>candidate adapter</text>
 <rect x='24' y='450' width='440' height='84' rx='10' fill='#f5f7fa' stroke='#9aa5b1' stroke-width='1.2'/>
 <text x='36' y='472' font-family='Helvetica, Arial, sans-serif' font-size='14' font-weight='700' fill='#1f2933' text-anchor='start'>coval_ledger.jsonl</text>
 <text x='36' y='492' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>every simulated call: session, scenario, policy, label,</text>
@@ -74,10 +74,10 @@
 <text x='502' y='524' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>→ rejected</text>
 <rect x='836' y='450' width='320' height='84' rx='10' fill='#fde8e8' stroke='#9aa5b1' stroke-width='1.2'/>
 <text x='848' y='472' font-family='Helvetica, Arial, sans-serif' font-size='14' font-weight='700' fill='#1f2933' text-anchor='start'>Coval dashboard</text>
-<text x='848' y='492' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>the same runs, transcripts and</text>
-<text x='848' y='508' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>metric verdicts, per simulation</text>
-<polyline points='129,404 129,450' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<polyline points='750,404 750,450' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
-<text x='762' y='420' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>receipt</text>
-<polyline points='361,404 361,430 996,430 996,450' fill='none' stroke='#1f2933' stroke-width='1.4' stroke-dasharray='5 4' marker-end='url(#a)'/>
+<text x='848' y='492' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>the same runs the loop launched:</text>
+<text x='848' y='508' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>transcripts and metric verdicts</text>
+<text x='848' y='524' font-family='Helvetica, Arial, sans-serif' font-size='12' font-weight='400' fill='#52606d' text-anchor='start'>per simulated call</text>
+<polyline points='200,404 200,450' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
+<polyline points='825,404 825,430 650,430 650,450' fill='none' stroke='#1f2933' stroke-width='1.4' marker-end='url(#a)'/>
+<text x='837' y='424' font-family='Helvetica, Arial, sans-serif' font-size='11' font-weight='400' fill='#52606d' text-anchor='start'>receipt</text>
 </svg>
