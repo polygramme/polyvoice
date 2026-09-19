@@ -1,0 +1,14 @@
+{
+ "sessions": 80,
+ "by_label": {
+  "filter": 16,
+  "evaluate.incumbent": 32,
+  "evaluate.candidate": 32
+ },
+ "reward_mean_by_label": {
+  "filter": 0.8438,
+  "evaluate.candidate": 0.9531,
+  "evaluate.incumbent": 0.875
+ },
+ "failed_sessions_with_explanations": 20
+}

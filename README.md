@@ -13,7 +13,10 @@ conversation to its score and the judge's explanation, the environment that maps
 onto polyloop's rollout contract, a CLI to check the account and seed test sets, and the
 `dental` recipe (a receptionist system prompt, 16 pool scenarios, 8 held-out scenarios).
 
-Status: **v0; the first full cycle ran on 2026-09-18.** Qwen3.5-4B on the `dental` recipe, Coval
+Status: **v0; two full cycles ran on 2026-09-18, and the second one earned a promotion.** On PhoneLLM Alpha 1
+(Daily's phone-agent SFT of Nemotron 3 Nano 30B-A3B) one OPSD cycle on 16 of its own simulated calls lifted the
+8 held-out scenarios from 0.875 to 0.953, delta +0.078 with a 95% CI of [+0.031, +0.125], 5 wins / 0 losses / 3
+ties, all gate checks passing; see [`docs/RESULTS.md`](docs/RESULTS.md). The earlier 4B cycle: Qwen3.5-4B on the `dental` recipe, Coval
 simulating the caller, 82 simulated conversations: base 0.888 vs candidate 0.938 on the 8 held-out
 scenarios × 4 repeats, paired delta +0.049 with a 95% CI of [−0.021, +0.117], 4 wins / 1 loss / 3 ties.
 The gate rejected it (a hair under the 0.05 minimum), which is the right call on 8 scenarios. Receipt

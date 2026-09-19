@@ -59,3 +59,33 @@ Two attempts, same recipe with `model: pipecat-ai/phonellm-alpha-1` and `rendere
   fraction 0.93. With those the loop's proxy came up on PhoneLLM in 13.7 min and the smoke scored 2/2 held-out
   conversations (mean reward 0.625; the 4B scored 0.875 on the same two).
 - Cost: ~$6 for the two failed attempts, ~$1 for the debug, ~$3 for the smoke.
+
+## dental, PhoneLLM Alpha 1, cycle 1 (2026-09-18 23:59 UTC, Modal H100:2, Coval): **gate passed**
+
+Same recipe as the 4B cycle with `model: pipecat-ai/phonellm-alpha-1`, `renderer: nemotron3_disable_thinking`,
+and the PhoneLLM sampler settings above plus `trainer.fused_lm_head_logprob: false` (Megatron's HybridModel
+forward has no `output_processor` argument; that flag is what crashed the first training attempt). Filter ran in
+one container, the train→gate half resumed from the saved runs directory in a second one.
+
+| | |
+|---|---|
+| filter | 8 scenarios × 2 = 16 conversations under PhoneLLM, mean reward 0.844 |
+| OPSD | 4 steps on 81 rows; teacher KL 0.354 → 0.289 → 0.212 → 0.346 |
+| incumbent (PhoneLLM base) held-out mean | 0.875 |
+| candidate held-out mean | 0.953 |
+| paired delta | **+0.078, CI95 [+0.031, +0.125]** |
+| wins / losses / ties (scenarios) | **5 / 0 / 3** |
+| checks | all four pass (min_delta 0.05, max_regressions 2, logprob agreement, enough tasks) |
+| decision | **promote** → `awaiting_approval` (promote mode is `approve`) |
+| Coval conversations | 80 (16 filter, 32 + 32 evaluate) |
+| GPU-seconds | preflight 260, filter 406, train 1353, evaluate 1019 + 805 |
+| candidate adapter | `tinker://model_480f9799/final` (LoRA rank 32 on PhoneLLM) |
+
+Per scenario, incumbent → candidate: 0.875→1.000, 0.688→0.812, 1.000→1.000, 0.812→1.000, 0.750→0.875,
+1.000→1.000, 0.875→0.938, 1.000→1.000. No scenario regressed.
+
+**Reading.** PhoneLLM starts lower than Qwen3.5-4B on this clinic's rules (0.875 vs 0.888 held-out; 0.844 vs
+0.938 on the filter set) because it was tuned for generic phone-agent behaviour, not this receptionist's
+emergency and referral rules. One OPSD cycle on 16 of its own simulated calls, with Coval's judge explanations
+as hints, lifted it to 0.953 with the confidence interval clear of zero. This is the first promotion the loop
+has earned. It is still 8 scenarios × 4 repeats; the ruler needs to grow before the curve means much.

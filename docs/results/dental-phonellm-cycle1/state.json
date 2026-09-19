@@ -1,0 +1,152 @@
+{
+  "candidate": {
+    "cycle": "20260918T231608Z",
+    "id": "dental-phonellm-20260918T231608Z",
+    "parent": "base",
+    "sampler_path": "tinker://model_480f9799/final",
+    "stages": [
+      {
+        "sampler_path": "tinker://model_480f9799/final",
+        "stage": "opsd",
+        "steps": 4
+      }
+    ],
+    "state_path": "tinker://model_480f9799/weights/final",
+    "step": 4
+  },
+  "decision": "promote",
+  "eval_candidate": {
+    "5gqzF9uzRXA83RJPvyUbDT": 1.0,
+    "74xRNCoyAkv3mWxdMJ6bxG": 0.8125,
+    "EM9jX8MJmsu74PgJKLs2Zk": 1.0,
+    "JN4LHmWWTCyAys6FHBkkKH": 1.0,
+    "cJmPpDLq6oYDdecuo9gyP4": 0.875,
+    "iEVKWfPwspyuP9C4QeiVvK": 1.0,
+    "k2YqeQinbUANkxeyGGxVWe": 0.9375,
+    "oX4ocyEw3KiAyTNNwiQN8x": 1.0
+  },
+  "eval_incumbent": {
+    "5gqzF9uzRXA83RJPvyUbDT": 0.875,
+    "74xRNCoyAkv3mWxdMJ6bxG": 0.6875,
+    "EM9jX8MJmsu74PgJKLs2Zk": 1.0,
+    "JN4LHmWWTCyAys6FHBkkKH": 0.8125,
+    "cJmPpDLq6oYDdecuo9gyP4": 0.75,
+    "iEVKWfPwspyuP9C4QeiVvK": 1.0,
+    "k2YqeQinbUANkxeyGGxVWe": 0.875,
+    "oX4ocyEw3KiAyTNNwiQN8x": 1.0
+  },
+  "failed_stage": null,
+  "gpu_seconds": {
+    "evaluate.candidate": 804.7123043259999,
+    "evaluate.incumbent": 1018.7765243699996,
+    "filter": 405.9342849300001,
+    "preflight": 259.63560253000014,
+    "train": 1353.186891926
+  },
+  "holdout_id": "holdout-8-743d1f21500f598b",
+  "holdout_names": [
+    "iEVKWfPwspyuP9C4QeiVvK",
+    "oX4ocyEw3KiAyTNNwiQN8x",
+    "JN4LHmWWTCyAys6FHBkkKH",
+    "cJmPpDLq6oYDdecuo9gyP4",
+    "EM9jX8MJmsu74PgJKLs2Zk",
+    "k2YqeQinbUANkxeyGGxVWe",
+    "74xRNCoyAkv3mWxdMJ6bxG",
+    "5gqzF9uzRXA83RJPvyUbDT"
+  ],
+  "incumbent": null,
+  "logprob_abs_diff_max": null,
+  "loop": "dental-phonellm",
+  "measured": 8,
+  "model": "pipecat-ai/phonellm-alpha-1",
+  "paired": {
+    "candidate_mean": 0.953125,
+    "delta_ci95": [
+      0.03125,
+      0.125
+    ],
+    "incumbent_mean": 0.875,
+    "losses": 0,
+    "mean_delta": 0.078125,
+    "n_tasks": 8,
+    "ties": 3,
+    "wins": 5
+  },
+  "pool_dataset": "coval://9vM3uNqc",
+  "pool_size": 16,
+  "reason": null,
+  "receipt": "/root/polyloop-runs/dental-phonellm/cycles/20260918T231608Z/receipt.json",
+  "stage_summary": {
+    "evaluate": {
+      "tasks": 8
+    },
+    "filter": {
+      "contested": 3,
+      "measured": 8,
+      "newly_measured": 8,
+      "rounds": 1
+    },
+    "gate": {
+      "ci": [
+        0.03125,
+        0.125
+      ],
+      "decision": "promote",
+      "losses": 0,
+      "mean_delta": 0.078125,
+      "wins": 5
+    },
+    "preflight": {
+      "checks": [
+        "pool",
+        "holdout",
+        "coval",
+        "trainer",
+        "disk",
+        "staleness",
+        "engine-warm"
+      ]
+    },
+    "promote": {
+      "action": "awaiting_approval",
+      "hint": "polyloop approve 20260918T231608Z"
+    },
+    "snapshot": {
+      "holdout": 8,
+      "holdout_id": "holdout-8-743d1f21500f598b",
+      "incumbent": "base",
+      "pool": 16,
+      "trace_files": 0
+    },
+    "train": {
+      "candidate": "dental-phonellm-20260918T231608Z",
+      "logprob_abs_diff_max": null,
+      "stages": [
+        {
+          "sampler_path": "tinker://model_480f9799/final",
+          "stage": "opsd",
+          "steps": 4
+        }
+      ],
+      "steps": 4
+    }
+  },
+  "stages_done": [
+    "snapshot",
+    "preflight",
+    "filter",
+    "train",
+    "evaluate",
+    "gate",
+    "promote"
+  ],
+  "started": "2026-09-18T23:16:09+00:00",
+  "status": "awaiting_approval",
+  "trace_files": [],
+  "train_steps": 4,
+  "train_task_names": [
+    "3RQiL4ZzsHcAXeEFwYevU3",
+    "69uf478DGdXNmDy7XYfyBy",
+    "eHKiasZBriLZx7KzuBqeKN"
+  ]
+}

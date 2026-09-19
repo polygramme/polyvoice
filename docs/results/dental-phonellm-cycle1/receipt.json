@@ -1,0 +1,92 @@
+{
+  "candidate": {
+    "cycle": "20260918T231608Z",
+    "id": "dental-phonellm-20260918T231608Z",
+    "parent": "base",
+    "sampler_path": "tinker://model_480f9799/final",
+    "stages": [
+      {
+        "sampler_path": "tinker://model_480f9799/final",
+        "stage": "opsd",
+        "steps": 4
+      }
+    ],
+    "state_path": "tinker://model_480f9799/weights/final",
+    "step": 4
+  },
+  "checks": {
+    "enough_tasks": true,
+    "logprob_agreement": true,
+    "paired_delta_above_min": true,
+    "regressions_within_cap": true
+  },
+  "cycle": "20260918T231608Z",
+  "decision": "promote",
+  "gpu_seconds": {
+    "evaluate.candidate": 804.7123043259999,
+    "evaluate.incumbent": 1018.7765243699996,
+    "filter": 405.9342849300001,
+    "preflight": 259.63560253000014,
+    "train": 1353.186891926
+  },
+  "holdout": {
+    "dataset": "coval://THRS5wSd",
+    "id": "holdout-8-743d1f21500f598b",
+    "n": 8,
+    "repeats": 4,
+    "temperature": 1.0
+  },
+  "incumbent": {
+    "id": "base"
+  },
+  "logprob_abs_diff_max": null,
+  "loop": "dental-phonellm",
+  "model": "pipecat-ai/phonellm-alpha-1",
+  "paired": {
+    "candidate_mean": 0.953125,
+    "delta_ci95": [
+      0.03125,
+      0.125
+    ],
+    "incumbent_mean": 0.875,
+    "losses": 0,
+    "mean_delta": 0.078125,
+    "n_tasks": 8,
+    "ties": 3,
+    "wins": 5
+  },
+  "promote_mode": "approve",
+  "schema": "promotion_receipt.v1",
+  "thresholds": {
+    "logprob_abs_diff_max": 0.05,
+    "max_regressions": 2,
+    "min_delta": 0.05,
+    "tie_band": 0.05
+  },
+  "train": {
+    "stage": {
+      "group_size": 2,
+      "groups_per_batch": 16,
+      "harness": "cookbook-bash",
+      "kind": "opsd",
+      "kl_discount_factor": 0.0,
+      "kl_penalty_coef": 1.0,
+      "learning_rate": 1e-05,
+      "lora_rank": 32,
+      "loss": "importance_sampling",
+      "max_hint_chars": 1500,
+      "max_steps_off_policy": 0,
+      "max_tokens": 256,
+      "max_trajectory_tokens": 4096,
+      "max_turns": 30,
+      "min_rows": 16,
+      "save_every": 2,
+      "steps": 4,
+      "teacher": null,
+      "teacher_hint": null
+    },
+    "steps": 4,
+    "tasks": 3
+  },
+  "ts": "2026-09-18T23:59:04+00:00"
+}
