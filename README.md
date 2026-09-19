@@ -99,6 +99,7 @@ recipes/dental/      loop.yaml, system.md, scenarios-pool.json, scenarios-holdou
 tests/               fake Coval in the live API's shapes; the polyloop runner driven end to end
 docs/PLAN.md         the full voice loop plan (sandbox rollouts, production scoring, model choice)
 docs/PIPECAT-PLAN.md how polyvoice generalises across Pipecat, Pipecat Evals and the eval partners (Coval, Cekura, Bluejay, Roark, Arize)
+docs/PIPECAT-IMPL.md implementation details verified on the Pipecat source (LLM slot, observer, evals verifier, transports, canary, OTel, packaging) + why this is not a PhoneLLM-example copy; unrun drafts in docs/drafts/pipecat/
 docs/RESULTS.md      cycle receipts; scripts/arch_diagram.py renders docs/architecture.svg
 ```
 
