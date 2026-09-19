@@ -98,6 +98,7 @@ polyvoice/
 recipes/dental/      loop.yaml, system.md, scenarios-pool.json, scenarios-holdout.json, program.md
 tests/               fake Coval in the live API's shapes; the polyloop runner driven end to end
 docs/PLAN.md         the full voice loop plan (sandbox rollouts, production scoring, model choice)
+docs/PIPECAT-PLAN.md how polyvoice generalises across Pipecat, Pipecat Evals and the eval partners (Coval, Cekura, Bluejay, Roark, Arize)
 docs/RESULTS.md      cycle receipts; scripts/arch_diagram.py renders docs/architecture.svg
 ```
 
