@@ -28,12 +28,7 @@ the same recipe runs on any GPU box with a public https URL for the proxy.
 
 ## Where polyvoice sits
 
-```
-polyvoice   environment + recipe   Coval caller = the world, Coval judges = the reward, dental scenarios, ledger
-polyloop-rl controller             cycles, capture proxy, receipt, lineage, budget; Environment protocol
-rlcli       training primitives    Tinker-API server on SkyRL (trainer + sampler GPUs), TITO bridge, hinted OPSD
-                                   teacher, logprob guard  (built on tinker-cookbook and SkyRL)
-```
+![the stack](docs/stack.svg)
 
 polyvoice contains no training code. It implements polyloop's five-method Environment protocol
 (`load_tasks`, `run_rollouts`, `preflight`, `session_hints`, `excluded_sessions`) on top of Coval's API:
