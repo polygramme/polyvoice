@@ -150,8 +150,12 @@ Rules that fall out of the research:
    targets, environment; depends on polyloop) runs the loop.
 4. **Session id is the join key everywhere.** `runner_args.session_id` → `X-Session-Id` header →
    `PipelineWorker(conversation_id=)` → observer records → verifier `Conversation.id` where the vendor
-   exposes it (Roark `pipecatCallId`; Coval sends its simulation id as `X-Session-Id` already). Where a
-   vendor cannot carry it (Cekura, Bluejay self-hosted), join by run + scenario + time and mark the record.
+   exposes it (Roark `pipecatCallId`; Coval templates its simulation id into `X-Session-Id` on the
+   chat-endpoint path, `coval/client.py:224`). Where a vendor cannot carry it (Cekura, Bluejay self-hosted,
+   and Coval's Pipecat Cloud path, where Coval calls the bot and adds no header), join by run + scenario +
+   time and mark the record. Do not confuse this with *agent* identity: Coval's `customer_agent_id` is
+   unique per org forever, even across deleted agents (409 on re-create), so agents are found by display
+   name and that field is never set (cycle-1 lesson, `coval/client.py:138-153`).
 5. **Speculative inferences are not turns.** The universal aggregator issues `LLMContextFrame(speculation=
    True)`; those requests must carry `X-Turn-Type: speculative` and be dropped from training rows.
 
