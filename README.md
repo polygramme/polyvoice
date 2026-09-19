@@ -26,6 +26,25 @@ reports scores under, so judge explanations join the right training rows, and he
 reach training. Run on a Modal H100:2 container with the proxy published through Modal's port forward;
 the same recipe runs on any GPU box with a public https URL for the proxy.
 
+## Where polyvoice sits
+
+```
+polyvoice   environment + recipe   Coval caller = the world, Coval judges = the reward, dental scenarios, ledger
+polyloop-rl controller             cycles, capture proxy, receipt, lineage, budget; Environment protocol
+rlcli       training primitives    Tinker-API server on SkyRL (trainer + sampler GPUs), TITO bridge, hinted OPSD
+                                   teacher, logprob guard  (built on tinker-cookbook and SkyRL)
+```
+
+polyvoice contains no training code. It implements polyloop's five-method Environment protocol
+(`load_tasks`, `run_rollouts`, `preflight`, `session_hints`, `excluded_sessions`) on top of Coval's API:
+a task is a Coval test case, K episodes are one Coval run with `iteration_count=K`, the reward is the mean
+of the configured metrics, and the judges' explanations flow back to polyloop as hindsight hints keyed by
+session id. polyloop does the rest exactly as it does for a coding agent: builds OPSD rows from the
+proxy's token-exact traces, trains a LoRA through rlcli's server, evaluates candidate against incumbent on
+the frozen held-out scenarios, and writes the receipt. The proxy serves whichever adapter won; Coval's
+agent configuration never changes. The longer walkthrough is in polyloop-rl's README under "How the
+pieces fit".
+
 ## What Coval does in this loop, and what it must not
 
 - **Held-out gate and filter**: a run = agent × persona × test set, `iteration_count` = K. Each
