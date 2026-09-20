@@ -15,7 +15,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+pipecat = ["pipecat-ai[openai]>=1.9.0,<2"]          # polyvoice.pipecat: LLM slot + observer (1.9.0: LLMContextFrame.speculation)
+evals = ["pipecat-ai[openai]>=1.11.0,<2"]           # polyvoice.verifiers.pipecat_evals (1.11.0: EvalScenarioFile)
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
 
 [project.scripts]
 polyvoice = "polyvoice.cli:main"

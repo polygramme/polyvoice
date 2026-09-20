@@ -11,7 +11,7 @@ from polyloop.stages import Runner
 
 from polyvoice.coval import client as cc
 from polyvoice.coval import rewards as rw
-from polyvoice.envs import coval as envmod
+from polyvoice.targets import proxy as proxymod
 from tests.fake_coval import FakeCoval
 
 
@@ -36,8 +36,8 @@ def proxy_calls(monkeypatch):
     def fake_get(url, timeout=None, **kw):
         return httpx.Response(200, json={"live": "base"})
 
-    monkeypatch.setattr(envmod.httpx, "post", fake_post)
-    monkeypatch.setattr(envmod.httpx, "get", fake_get)
+    monkeypatch.setattr(proxymod.httpx, "post", fake_post)
+    monkeypatch.setattr(proxymod.httpx, "get", fake_get)
     return calls
 
 
