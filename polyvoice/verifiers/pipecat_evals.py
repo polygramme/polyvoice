@@ -145,8 +145,8 @@ class PipecatEvalsVerifier:
         env = {**os.environ, **self.env, "POLYVOICE_SESSION": sid, "POLYVOICE_POLICY_URL": self.policy_url}
         f = log.open("wb")  # closed when the process exits (fd inherited)
         return await asyncio.create_subprocess_exec(
-            self.bot_python, str(self.bot_path), "-t", "eval", "--host", self.host, "--port", str(port),
-            stdout=f, stderr=asyncio.subprocess.STDOUT, env=env, cwd=str(self.bot_path.parent))
+            self.bot_python, str(Path(self.bot_path).resolve()), "-t", "eval", "--host", self.host, "--port", str(port),
+            stdout=f, stderr=asyncio.subprocess.STDOUT, env=env, cwd=str(Path(self.bot_path).resolve().parent))
 
 
 def _port_free(host: str, port: int) -> bool:

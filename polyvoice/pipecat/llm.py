@@ -8,6 +8,11 @@ from pipecat.services.openai.llm import OpenAILLMService
 
 
 class PolyvoiceLLMService(OpenAILLMService):
+    # Most OpenAI-compatible servers (vLLM chat templates, hosted open models) do not know the `developer`
+    # role; Pipecat's adapter rewrites it to `user` when this is False, which also matches what the
+    # trainee's renderer will see.
+    supports_developer_role = False
+
     def __init__(self, *, session_id: str, **kwargs):
         super().__init__(**kwargs)
         self._session_id = session_id
